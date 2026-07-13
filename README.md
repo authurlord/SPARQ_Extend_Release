@@ -51,8 +51,19 @@ products are documented in [`data/README.md`](./data/README.md) and
 | TableBench | ROUGE-L | 0.3507 | **0.4671** |
 | FeTaQA | ROUGE-L | 0.4980 | **0.5036** |
 
-**Open setting** — 1690 strict-recoverable OTT-QA dev subset, Qwen3.6-35B
-reader:
+**Open setting (main results, paper Table VI)** — full dev, open-domain
+(both table and passages retrieved; gold cell→passage metadata removed),
+Qwen3.6-35B reader:
+
+| Benchmark | n | SPARQ+ EM | SPARQ+ F1 | best offline baseline (EM) |
+|---|---:|---:|---:|---|
+| **HybridQA** | 3,466 | **0.508** | **0.549** | HELIOS (−1.3 pp) |
+| **OTT-QA** | 2,214 | **0.676** | **0.732** | HELIOS (−8.7 pp), COS (−17.2 pp) |
+
+SPARQ+ stays **< 1 s/query** (0.776 s HybridQA, 0.973 s OTT-QA) vs iterative
+pipelines (HELIOS 23.7 s / 28.9 s).
+
+**OTT-QA strict-1690 subset** (Stage-1 ablation reference, Qwen3.6-35B):
 
 | Config | EM | F1 |
 |---|---:|---:|
@@ -60,9 +71,9 @@ reader:
 | **E2E, + table reranker top-1** | **65.92** | **71.60** |
 | Oracle ceiling (gold table + BM25 top-30) | 74.44 | 79.68 |
 
-Full-dev OTT-QA (2214) with the 5.96M passage pool: **EM 0.6762 / F1 0.7315**.
-HybridQA (35B + passage reranker top-20): **EM 73.92** (beats full-context
-teacher 69.40 at 37% less context).
+(A separate *closed*/anchored-table HybridQA study — gold table given — reached
+EM 73.92 with a passage reranker; that is a different, easier setting and is
+**not** the open-domain main result above.)
 
 ## Repository layout
 

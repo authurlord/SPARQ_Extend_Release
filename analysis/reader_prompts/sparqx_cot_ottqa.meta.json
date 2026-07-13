@@ -1,0 +1,8 @@
+{
+  "n": 2214,
+  "max_tokens": 2048,
+  "parse": "cot",
+  "temperature": 0.0,
+  "enable_thinking": false,
+  "note": "matches analysis/ottqa_full2214/e2e_5m_reranker_top1 (full-dev 2214)"
+}

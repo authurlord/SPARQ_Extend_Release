@@ -1,0 +1,8 @@
+{
+  "n": 3466,
+  "max_tokens": 512,
+  "parse": "cot",
+  "temperature": 0.0,
+  "enable_thinking": false,
+  "note": "matches e2e_v15_v14plus_ottqaPR_K30 (HybridQA full-dev 3466, CoT v2, top-30 reranked passages)"
+}

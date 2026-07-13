@@ -99,16 +99,37 @@ Full-dev OTT-QA (2214) with the 5.96M `all_passages.json` pool: **EM 0.6762 /
 F1 0.7315** (see `scripts/open/export_sparqx_evidence_for_helios.py` and
 `docs/DATA_HANDOFF.md`).
 
-## 3. HybridQA (open, anchored table)
+## 3. HybridQA (open-domain, main result — paper Table VI)
 
+Full dev, n=3,466, open-domain (gold cell→passage metadata removed): SPARQ+ =
+**EM 0.508 / F1 0.549**. Progressive ablation (Table X) ends at
+`RRF + reranker with cell-link augmentation → 0.508`.
+
+**Weight-free / retrieval-free reproduction (recommended).** The full
+per-query reader inputs (table + top-30 cell-link passages + CoT prompt) are
+frozen at `analysis/reader_prompts/sparqx_cot_hybridqa.jsonl.gz` (3,466 rows).
+Just run the reader:
+```bash
+python scripts/open/remote_timed_reader.py \
+  analysis/reader_prompts/sparqx_cot_hybridqa.jsonl.gz \
+  --api-base http://127.0.0.1:9543/v1 --model qwen3.6-35b --concurrency 64
+# -> EM 0.5069 / F1 0.5528  (matches experiments/results/sparqx_cot_hybridqa.4090x2.summary.json)
+```
+The same path reproduces the full-dev **OTT-QA** main result (EM 0.676 / F1
+0.732) from `analysis/reader_prompts/sparqx_cot_ottqa.jsonl.gz`.
+
+**From retrieval (full pipeline).** The Stage-3 passage caches are shipped
+(`analysis/hybridqa/hybridqa_full_dev_passage_{celllink,bm25}_top30.jsonl`);
+the anchored-table runner is:
 ```bash
 python src/schedule_pipeline/run_full_pipeline_hybridqa.py \
   --hybridqa-raw-dir data/hybridqa_raw --split validation --first-n 100 \
   --api-base http://127.0.0.1:9543/v1 --model qwen3.6-35b
 ```
 
-Headline: 35B + passage reranker top-20 = **EM 73.92** (beats full-context
-teacher 69.40 at ~37% less context).
+> Note: a separate *closed*/anchored-table HybridQA study (gold table given)
+> reached EM 73.92 with a passage reranker top-20 — that is a different, easier
+> setting, not the open-domain main result.
 
 ## Notes
 
