@@ -60,6 +60,21 @@ API_BASE=http://127.0.0.1:9543/v1 N=30 METHOD=rrf bash examples/smoke_open_ottqa
 # verified: stage1@1 0.767, EM 0.50 / F1 0.518 (30-q, 3-leg RRF baseline, 0 errors).
 ```
 
+**Weight-free reranker path (reproduce EM 65.92 without the 15 GB reranker):**
+The table-reranker top-K output is shipped at
+`analysis/ottqa_strict1690/reranked_cands_v1.jsonl`, so you can get the reranked
+top-1 table without loading the reranker checkpoint:
+```bash
+python scripts/open/eval_e2e_1690.py \
+  --subset analysis/ottqa_dev_strict1690.jsonl \
+  --ottqa-tables data/ottqa_repo/data/traindev_tables.json \
+  --pool analysis/open_pool_full/passages.jsonl \
+  --reranked-cands-jsonl analysis/ottqa_strict1690/reranked_cands_v1.jsonl \
+  --K-pas 30 --api-base http://127.0.0.1:9543/v1 --api-key EMPTY --model qwen3.6-35b \
+  --tag reranker_v1_top1 --out-dir analysis/ottqa_strict1690
+# -> EM 65.92 / F1 71.60
+```
+
 **Full 1690 E2E:**
 ```bash
 python scripts/open/eval_ottqa_per_method_e2e.py --method rrf \
