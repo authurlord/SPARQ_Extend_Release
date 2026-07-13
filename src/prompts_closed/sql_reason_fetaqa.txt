@@ -1,0 +1,110 @@
+Your task is to determine whether you need an SQLite program to solve the question based on the provided table.
+You must first understand the question and the table structure. Identify if the question requires any mathematical operations (e.g., counting, summing, finding the maximum/minimum, averaging) or complex filtering that goes beyond a simple lookup.
+
+The final SQLite program must be simple and directly answer the question.
+
+Final Output:
+
+If the question involves any calculation or complex filtering, you must write an SQLite program.
+
+If the question can be answered by a simple lookup in the table, you must return 'None'.
+
+Response Format:
+Begin your response with 'Output: ' and always include the following:
+
+Final Output: A step-by-step reasoning followed by the SQLite program as the solution, or 'None' if SQL is not required.
+
+Important Rules:
+
+When a table contains pre-calculated summary rows (e.g., a 'Total' row), use these rows for questions about totals to simplify the query.
+
+Do not create queries for simple lookups. For example, "Which single was on the album 'Cornerstone'?" is a simple lookup. "Which album had the most singles?" requires a calculation.
+
+Think step by step. Carefully analyze the question and the table columns before deciding.
+
+<input>
+CREATE TABLE t (
+"year" TEXT,
+"title" TEXT,
+"role" TEXT,
+"notes" TEXT
+)
+/*
+All example rows:
+SELECT * FROM w;
+year    title   role    notes
+1976    taxi driver "iris' father"  uncredited, (newspaper article)
+1984    the muppets take manhattan  extra   uncredited
+1985    after hours club berlin patron    uncredited
+*/
+columns: ['year', 'title', 'role', 'notes']
+Q: how many films was charles scorsese uncredited in?
+<output>
+Final Output:
+The question requires counting the number of films where the 'notes' column indicates an uncredited role. This involves filtering based on a text pattern and then performing a count, which is a mathematical operation.
+
+Step 1: Filter the table to find all rows where the "notes" column contains the word 'uncredited'.
+SELECT * FROM w WHERE "notes" LIKE '%uncredited%';
+
+Step 2: Count the number of matching films from the filtered results.
+SELECT COUNT() FROM w WHERE "notes" LIKE '%uncredited%';
+SQL: SELECT COUNT() FROM w WHERE "notes" LIKE '%uncredited%';
+
+<input>
+CREATE TABLE t (
+"club" TEXT,
+"league" TEXT,
+"season" TEXT,
+"total apps" REAL,
+"total goals" REAL,
+"total asts" REAL
+)
+/*
+All example rows:
+SELECT * FROM w;
+club    league  season  total apps  total goals total asts
+ferro carril oeste  total   total   117 5   23
+racing club total   total   109 20  24
+sporting cp total   total   79  7   15
+*/
+columns: ['club', 'league', 'season', 'total apps', 'total goals', 'total asts']
+Q: where did marcos acuña have the most matches, goals, and assists totals and assists and how many of each did he have.?
+<output>
+Final Output:
+The question asks to find the club with the "most" matches, goals, and assists. This requires finding the maximum values from the total columns. Since this involves a mathematical comparison (finding the maximum), we will use SQLite. The table conveniently provides 'total' rows for each club.
+
+Step 1: Filter the table to only consider the summary rows for each club. In this table, these are the rows where the "league" column is 'total'.
+SELECT * FROM w WHERE "league" = 'total';
+
+Step 2: Order the results by the total number of matches ('total apps') in descending order and select the top one to find the club with the most matches. Then select the required columns.
+SELECT "club", "total apps", "total goals", "total asts" FROM w WHERE "league" = 'total' ORDER BY "total apps" DESC LIMIT 1;
+SQL: SELECT "club", "total apps", "total goals", "total asts" FROM w WHERE "league" = 'total' ORDER BY "total apps" DESC LIMIT 1;
+
+<input>
+CREATE TABLE t (
+"year" TEXT,
+"single" TEXT,
+"us country" TEXT,
+"can country" TEXT,
+"album" TEXT
+)
+/*
+All example rows:
+SELECT * FROM w;
+year    single  us country  can country album
+1985    "my heart holds on" 64  —   holly dunn
+1986    "two too many"  39  —   holly dunn
+1986    "daddy's hands" 7   —   holly dunn
+*/
+columns: ['year', 'single', 'us country', 'can country', 'album']
+Q: how many singles were released from the album 'holly dunn'?
+<output>
+Final Output:
+The question asks for the number of singles from a specific album. This requires filtering the table and then counting the matching rows, which is a mathematical operation.
+
+Step 1: Filter the table to find all rows where the "album" is 'holly dunn'.
+SELECT * FROM w WHERE "album" = 'holly dunn';
+
+Step 2: Count the number of resulting rows to find the total number of singles for that album.
+SELECT COUNT("Single") FROM w WHERE "Album" = 'Holly Dunn';
+SQL: SELECT COUNT("Single") FROM w WHERE "Album" = 'Holly Dunn';

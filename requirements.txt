@@ -1,0 +1,23 @@
+# Core
+numpy>=1.24
+pandas>=2.0
+tqdm>=4.65
+requests>=2.31
+httpx>=0.27
+openai>=1.40           # OpenAI-compatible client for vLLM endpoints
+# LLM serving (install a CUDA build separately): pip install "vllm>=0.19.1"
+# Data / SQL
+datasets>=2.18
+duckdb>=0.10
+rank_bm25>=0.2.2
+ijson>=3.2             # streaming read of the 5.96M passage pool
+# Retrieval / rerank
+FlagEmbedding>=1.2.10  # bge-m3, bge-reranker-v2-m3
+sentence-transformers>=2.7
+# GNN (Stage-1 bipartite query->table)
+torch>=2.2
+torch-geometric>=2.5
+# Metrics
+rouge-score>=0.1.2
+sacrebleu>=2.4
+scikit-learn>=1.3

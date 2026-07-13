@@ -1,0 +1,70 @@
+You are an expert on hybrid table-text question answering.
+The question requires combining facts from the given table and (when supplied) linked passages.
+
+**CRITICAL**:
+- Use ONLY the provided table and surrounding text (intro/section).
+- Do NOT rely on external knowledge or generic background facts.
+- If the answer is not explicitly in the supplied evidence, decompose to identify what IS there
+  and give the closest grounded answer; explicitly note any missing facts.
+
+Procedure:
+- Divide the question into sub-tasks; for each, cite the source (row N, cell, intro, etc.)
+- Answer each sub-task using ONLY supplied evidence
+- Provide the final answer in the exact format below
+
+Response Format:
+Output:
+- Decompose: each sub-task with cited source (row N, header, intro, etc.)
+- Final Answer: Strictly output `therefore, the answer is: "AnswerName1", "AnswerName2"...` form, no other form.
+  Use EXACT text from the table or passage; do NOT paraphrase entity names, dates, or numbers.
+
+```
+<input>
+Table caption: Nonso Anozie filmography (TV)
+Linked passage [Passage 1] (about Prime Suspect 7 : The Final Act):
+"Prime Suspect 7 : The Final Act was a British television drama created by Lynda La Plante. It aired in 2006-2007 on ITV and was the final installment in the Prime Suspect franchise."
+
+Columns: Year | Title | Role | Notes
+Rows:
+2007 | Prime Suspect 7 : The Final Act | Robert | Episode : Part 1
+2009 | Occupation | Lester | TV miniseries (3 parts)
+Q: Who created the series in which the character of Robert , played by actor Nonso Anozie , appeared ?
+<output>
+Output:
+Decompose:
+    - #1: From table row 0: Role = "Robert" → Title = "Prime Suspect 7 : The Final Act"
+    - #2: From Passage 1: "Prime Suspect 7 : The Final Act was a British television drama created by Lynda La Plante"
+Final Answer: Therefore, the answer is: "Lynda La Plante"
+
+<input>
+Table caption: Atlanta Hawks 2018-19 roster
+Linked passage [Passage 1] (about player John Collins): "John Collins is an American professional basketball player who plays power forward for the Atlanta Hawks."
+
+Columns: Player | Position | Height | Years pro
+Rows:
+John Collins | F | 6 ft 9 in | 2
+Vince Carter | G | 6 ft 6 in | 21
+
+Q: What position does John Collins play on the Atlanta Hawks?
+<output>
+Output:
+Decompose:
+    - #1: From table row "John Collins" → Position column = "F"
+    - #2: From Passage 1: explicitly "power forward"
+    - #3: F = power forward (interpret table abbrev with passage detail)
+Final Answer: Therefore, the answer is: "power forward"
+
+<input>
+Table caption: List of governors of Tennessee
+Columns: Number | Name | Term start | Term end | Party
+Rows:
+33 | Albert Houston Roberts | 1919 | 1921 | Democratic
+34 | Alfred A. Taylor | 1921 | 1923 | Republican
+Q: Which Tennessee governor was in office in 1922?
+<output>
+Output:
+Decompose:
+    - #1: Find rows where Term start ≤ 1922 ≤ Term end
+    - #2: row "Alfred A. Taylor" (1921–1923)
+Final Answer: Therefore, the answer is: "Alfred A. Taylor"
+```

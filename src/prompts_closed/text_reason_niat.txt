@@ -1,0 +1,74 @@
+You are an expert on table data.
+You must use the table data and the additional evidence to answer the given question.
+
+Procedure:
+- Divide the main statement into sub-tasks and answer each sub-task
+- Based on the answers, provide the final answer to the question
+
+**NOTE** 
+Please be extremely careful, pause, make sure all instructions have been followed and only then output the answer
+
+Response Format:
+Begin your response with 'Output: ' and always include the following:
+- Decompose: Divide the main question into sub-tasks and answer each sub-task
+- Final Answer: Strictly output as a short phrase starting by `therefore, the answer is: "AnswerName1", "AnswerName2"...` form, no other form
+
+- Read the question carefully, understand, and return what the question asks.
+- Be careful, make sure you have followed all instructions and only then return the output.
+```
+<input>
+table caption: Employee Labor Contracts
+/*
+col : group | union | class_or_craft | employees | contract_date
+row 0 : Mainline | Allied Pilots Association | Pilots | 13200 | 2020
+row 1 : Mainline | APFA | Flight Attendants | 24900 | 2019
+row 2 : Envoy | TWU | Ground School Instructors | 10 | 2019
+*/
+columns: ['group', 'union', 'class_or_craft', 'employees', 'contract_date']
+Q: How many Ground School Instructors are represented by TWU?
+<output>
+Use the table to answer the question.
+1. Decompose:
+    - #1: Find rows where class_or_craft = Ground School Instructors AND union = TWU
+    - #2: employees for that row = 10
+2. Final Answer: Therefore, the answer is: "10"
+
+<input>
+table caption: LNG Plants Worldwide
+/*
+col : plant_name | country | startup_date | capacity
+row 0 : Qatargas II | Qatar | 2009 | 7.8
+row 1 : Nigeria LNG | Nigeria | 1999 | 23.5
+row 2 : Sakhalin II | Russia | 2009 | 9.6
+*/
+columns: ['plant_name', 'country', 'startup_date', 'capacity']
+Q: How much capacity does Sakhalin II have?
+<output>
+1. Decompose:
+    - #1: Find the row where plant_name = Sakhalin II
+    - #2: capacity for that row = 9.6
+2. Final Answer: Therefore, the answer is: "9.6"
+
+<input>
+/*
+col : draw | country | artist | song | place | points
+row 0 : 1 | Yugoslavia | Extra Nena | Ljubim te pesmama | 13 | 44
+row 1 : 2 | France | Kali | Monté la rivié | 8 | 73
+row 2 : 3 | Denmark | Lotte Nilsson | Alt det som ingen ser | 12 | 47
+*/
+columns: ['draw', 'country', 'artist', 'song', 'place', 'points']
+Q: In what position did Denmark finish in the Eurovision Song Contest 1992?
+<output>
+
+Here is an additional evidence to help the answering process.
+Additional Evidence:
+/*
+col : country | place
+row 0 : Denmark | 12
+*/
+Using the table and the additional evidence to answer the question
+1. Decompose:
+    - #1: Find the row where country = Denmark
+    - #2: place for Denmark = 12
+2. Final Answer: Therefore, the answer is: "12"
+```

@@ -1,0 +1,100 @@
+You are given a table with potentially nested/hierarchical structure and a question.
+Your task is to write an SQLite program to select the relevant columns to help answer the question.
+The SQLite program need not directly answer the question.
+Assume you always have enough information when executing the SQLite. Fuzzy match data if unsure.
+
+1. Plan:  
+ - Identify critical values and columns from the table related to the question.
+ - Make use of your domain knowledge to find the correct approach to solve the question.
+ - Always select columns with special aggregate values like 'total' if present.
+2. Retrieval:
+ - Generate a simple SQL query extracting the relevant columns
+ - SQL: SELECT <COLUMNS> FROM w;
+ - Evidence: f_col([column names])
+
+Response Format:
+Begin your response with 'Output' and include:
+- Plan: Write the plan for column extraction along with a reasoning chain
+- Retrieval: Write a simple SQL query
+  Evidence: f_col([column names])
+
+Before you return the answer, review your outputs and make sure you have followed all the given instructions.
+```
+<input>
+CREATE TABLE Employee Labor Contracts(
+	row_id int,
+	group text,
+	union text,
+	class_or_craft text,
+	employees int,
+	contract_date text)
+/*
+SELECT * FROM w;
+row_id	group	union	class_or_craft	employees	contract_date
+0	Mainline	Allied Pilots Association	Pilots	13200	2020
+1	Mainline	APFA	Flight Attendants	24900	2019
+2	Envoy	ALPA	Pilots	2200	2024
+3	Envoy	AFA	Flight Attendants	1300	2020
+*/
+columns: ['row_id', 'group', 'union', 'class_or_craft', 'employees', 'contract_date']
+Q: How many employees are represented by ALPA?
+<output>
+1. Plan:
+ - We need to find the number of employees for a specific union (ALPA)
+ - The relevant columns are 'union' and 'employees'
+ - No special aggregate values need to be included
+2. Retrieval:
+ - SQL: SELECT `union`, `employees` FROM w;
+ - Evidence: f_col([union, employees])
+
+<input>
+CREATE TABLE LNG Plants(
+	row_id int,
+	plant_name text,
+	country text,
+	startup_date text,
+	capacity text)
+/*
+SELECT * FROM w;
+row_id	plant_name	country	startup_date	capacity
+0	Qatargas II	Qatar	2009	7.8
+1	Arzew GL4Z	Algeria	1964	0.90
+2	Nigeria LNG	Nigeria	1999	23.5
+*/
+columns: ['row_id', 'plant_name', 'country', 'startup_date', 'capacity']
+Q: Which country has the most LNG plants?
+<output>
+1. Plan:
+ - We need to count plants by country
+ - The critical column is 'country' for counting
+ - We also need 'plant_name' to verify the count
+2. Retrieval:
+ - SQL: SELECT `country`, `plant_name` FROM w;
+ - Evidence: f_col([country, plant_name])
+
+<input>
+CREATE TABLE Eurovision 1992(
+	row_id int,
+	draw int,
+	country text,
+	artist text,
+	song text,
+	place int,
+	points int)
+/*
+SELECT * FROM w;
+row_id	draw	country	artist	song	place	points
+0	1	Yugoslavia	Extra Nena	Ljubim te pesmama	13	44
+1	2	France	Kali	Monté la rivié	8	73
+2	3	Denmark	Lotte Nilsson	Alt det som ingen ser	12	47
+*/
+columns: ['row_id', 'draw', 'country', 'artist', 'song', 'place', 'points']
+Q: In what position did Denmark finish?
+<output>
+1. Plan:
+ - We need to find the finishing position (place) for a specific country (Denmark)
+ - The critical columns are 'country' and 'place'
+2. Retrieval:
+ - SQL: SELECT `country`, `place` FROM w;
+ - Evidence: f_col([country, place])
+```

@@ -1,0 +1,35 @@
+You are answering a HybridQA question using structured table evidence, optional SQL results, and linked passages.
+Reason briefly and then give the final answer span.
+
+Follow this format exactly:
+Reasoning: <short reasoning>
+Answer: <final answer>
+
+Example 1
+Question: Which museum in Glasgow had the most visitors in 2019?
+Selected Table:
+col : row_id | museum | city | visitors_2019
+row 0 : 0 | riverside museum | glasgow | 1275000
+row 2 : 2 | the burrell collection | glasgow | 345000
+SQL Result:
+col : row_id | museum
+row 0 : 0 | riverside museum
+Linked Passages:
+[Passage 1] row=0 col=museum cell=riverside museum
+The Riverside Museum is located at 100 Pointhouse Road, Glasgow.
+Reasoning: The SQL result identifies Riverside Museum as the relevant row, and the passage gives its address.
+Answer: Riverside Museum
+
+Example 2
+Question: What is the address of the museum located in a Victorian house?
+Selected Table:
+col : row_id | museum | building_type
+row 1 : 1 | Example House Museum | victorian house
+SQL Result:
+col : row_id | museum
+row 0 : 1 | Example House Museum
+Linked Passages:
+[Passage 1] row=1 col=museum cell=Example House Museum
+Example House Museum is at 12 King Street in Bristol.
+Reasoning: The row with building type Victorian house points to Example House Museum, whose passage provides the address.
+Answer: 12 King Street

@@ -1,0 +1,120 @@
+You are an expert on table data.
+You must use the table data and the additional evidence to answer the given question.
+
+Procedure:
+
+Divide the main statement into sub-tasks and answer each sub-task
+
+Based on the answers, check whether the statement is supported by the table
+
+NOTE
+Please be extremely careful, pause, make sure all instructions have been followed and only then output the answer
+
+Response Format:
+Begin your response with 'Output: ' and always include the following:
+
+Decompose: Divide the main question into sub-tasks and answer each sub-task
+
+Final Answer: Based on the decomposition, provide a complete and natural-sounding answer to the question in a full sentence.
+
+Read the question carefully, understand, and return what the question asks.
+
+Be careful, make sure you have followed all instructions and only then return the output.
+
+<input>
+CREATE TABLE t (
+"year" TEXT,
+"title" TEXT,
+"role" TEXT,
+"notes" TEXT
+)
+/*
+All example rows:
+SELECT * FROM w;
+year    title   role    notes
+1976    taxi driver "iris' father"  uncredited, (newspaper article)
+1984    the muppets take manhattan  extra   uncredited
+1985    after hours club berlin patron    uncredited
+/
+columns: ['year', 'title', 'role', 'notes']
+Q: how many films was charles scorsese uncredited in?
+<output>
+Here is an additional evidence to help the answering process.
+/
+col: count
+row 0: 3
+*/
+Using the table and the additional evidence to answer the question
+
+Decompose:
+
+#1: The question asks for the total count of uncredited films.
+
+#2: The additional evidence, derived from a database query, shows the count is 3.
+
+Final Answer: Based on the table, Charles Scorsese was uncredited in 3 films.
+
+<input>
+CREATE TABLE t (
+"club" TEXT,
+"league" TEXT,
+"season" TEXT,
+"total apps" REAL,
+"total goals" REAL,
+"total asts" REAL
+)
+/*
+All example rows:
+SELECT * FROM w;
+club    league  season  total apps  total goals total asts
+ferro carril oeste  total   total   117 5   23
+racing club total   total   109 20  24
+sporting cp total   total   79  7   15
+/
+columns: ['club', 'league', 'season', 'total apps', 'total goals', 'total asts']
+Q: where did marcos acuña have the most matches, goals, and assists totals and assists and how many of each did he have.?
+<output>
+Here is an additional evidence to help the answering process.
+/
+col: club | total apps | total goals | total asts
+row 0: ferro carril oeste | 117 | 5 | 23
+*/
+Using the table and the additional evidence to answer the question
+
+Decompose:
+
+#1: The question asks for the club with the most matches and the corresponding stats.
+
+#2: The additional evidence, which is the result of a query to find the maximum, identifies the club as 'ferro carril oeste'.
+
+#3: The stats for this club are 117 matches, 5 goals, and 23 assists.
+
+Final Answer: Marcos Acuña had the most matches at Ferro Carril Oeste, with a total of 117 matches, 5 goals, and 23 assists.
+
+<input>
+CREATE TABLE t (
+"year" TEXT,
+"single" TEXT,
+"us country" TEXT,
+"can country" TEXT,
+"album" TEXT
+)
+/*
+All example rows:
+SELECT * FROM w;
+year    single  us country  can country album
+1985    "my heart holds on" 64  —   holly dunn
+1986    "two too many"  39  —   holly dunn
+1986    "daddy's hands" 7   —   holly dunn
+/
+columns: ['year', 'single', 'us country', 'can country', 'album']
+Q: how many singles were released from the album 'holly dunn'?
+<output>
+
+Decompose:
+
+#1: Find all singles where the 'album' column is 'holly dunn'. The singles are "my heart holds on", "two too many", and "daddy's hands".
+
+#2: Count the number of singles found in the previous step. There are 3 singles.
+
+Final Answer: Therefore, the answer is: "3"

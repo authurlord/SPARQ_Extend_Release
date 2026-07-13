@@ -1,0 +1,88 @@
+Your task is to determine whether you need an SQLite program to solve the question. 
+You must understand the question and identify if it involves any calculations. The final SQLite program must be simple.
+
+Final Output:
+If the question has any mathematical component, then you must write an SQLite program to extract a subtable to answer the question. Otherwise, simply return 'None'
+
+Response Format:
+Begin your response with 'Output: ' and always include the following:
+   - Final Output: A step-by-step reasoning followed by 'None' if SQL is not required otherwise the SQLite program as the solution.
+
+Exclude aggregate values like 'total', 'average', etc from your SQLite programs.
+Follow all instructions before returning the answer. Be careful. Think step by step.
+```
+<input>
+CREATE TABLE Employee Labor Contracts(
+   row_id int,
+   group text,
+   union text,
+   class_or_craft text,
+   employees int,
+   contract_date text)
+/*
+All rows of the table:
+SELECT * FROM w;
+row_id   group   union   class_or_craft   employees   contract_date
+0   Mainline   Allied Pilots Association   Pilots   13200   2020
+1   Mainline   APFA   Flight Attendants   24900   2019
+2   Mainline   TWU-IAM   Mechanics and Related   12400   2018
+3   Envoy   ALPA   Pilots   2200   2024
+*/
+columns: ['row_id', 'group', 'union', 'class_or_craft', 'employees', 'contract_date']
+Q: How many Ground School Instructors are represented by TWU?
+Final Output:
+We need to find the employee count for a specific craft and union. This is a simple lookup, not a calculation.
+ - Since this is just a lookup, the solution is None.
+
+<input>
+CREATE TABLE LNG Plants(
+	row_id int,
+	plant_name text,
+	country text,
+	startup_date text,
+	capacity text)
+/*
+All example rows:
+SELECT * FROM w;
+row_id	plant_name	country	startup_date	capacity
+0	Qatargas II	Qatar	2009	7.8
+1	Arzew GL4Z	Algeria	1964	0.90
+2	Nigeria LNG	Nigeria	1999	23.5
+3	Sakhalin II	Russia	2009	9.6
+*/
+columns: ['row_id', 'plant_name', 'country', 'startup_date', 'capacity']
+Q: What is the total capacity of all plants in Qatar?
+<output>
+Final Output:
+This question involves calculating the total capacity of plants in a specific country. Since this involves mathematical operations (SUM), we will use SQLite to solve this.
+ - Step 1: Filter rows where country is Qatar
+   SELECT * FROM w WHERE `country` = 'Qatar';
+ - Step 2: Sum the capacity values for Qatar
+   SELECT SUM(CAST(`capacity` AS REAL)) AS total_capacity FROM w WHERE `country` = 'Qatar';
+SQL: SELECT SUM(CAST(`capacity` AS REAL)) AS total_capacity FROM w WHERE `country` = 'Qatar';
+
+<input>
+CREATE TABLE Eurovision 1992(
+	row_id int,
+	draw int,
+	country text,
+	artist text,
+	song text,
+	place int,
+	points int)
+/*
+SELECT * FROM w;
+row_id	draw	country	artist	song	place	points
+0	1	Yugoslavia	Extra Nena	Ljubim te pesmama	13	44
+1	2	France	Kali	Monté la rivié	8	73
+2	3	Denmark	Lotte Nilsson	Alt det som ingen ser	12	47
+*/
+columns: ['row_id', 'draw', 'country', 'artist', 'song', 'place', 'points']
+Q: Which country received the most points?
+<output>
+Final Output: 
+This question involves finding the maximum value in a column and retrieving the corresponding country.
+ - Step 1: Find the row with maximum points
+   SELECT `country`, `points` FROM w ORDER BY `points` DESC LIMIT 1;
+SQL: SELECT `country`, `points` FROM w ORDER BY `points` DESC LIMIT 1;
+```

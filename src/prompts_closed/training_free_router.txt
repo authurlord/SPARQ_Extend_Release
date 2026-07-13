@@ -1,0 +1,172 @@
+Given a query and a table, determine the necessary operations to answer the query. The order of the operators in the output list represents their importance, with the first operator being the most crucial.
+
+The possible operations are:
+
+'Base': No specific operation is needed; the answer can be found by directly observing the table.
+
+'Execute_SQL': Required for complex calculations or aggregations (e.g., COUNT, SUM, AVG, GROUP BY).
+
+'Select_Column': Needed when the query specifically asks for information from a subset of columns.
+
+'Select_Row': Needed when the query requires filtering the table to find specific rows based on certain conditions.
+
+'RAG': Employ a Retrieval-Augmented Generation (RAG) system. This involves rewriting the query and performing a semantic search to find relevant content. This is useful when the query's intent isn't directly translatable to a simple SQL condition and may require external knowledge.
+
+Your output must be a single JSON list. Here is an example template for the output:
+["Select_Column", "Select_Row", "Execute_SQL"]
+
+<input>
+Q: how many german racers finished the race?
+Table Content:
+CREATE TABLE 00__German_motorcycle_Grand_Prix (
+pos text,
+no int,
+rider text,
+manufacturer text,
+laps int,
+time_retired text,
+grid int,
+points int
+)
+/*
+All rows of the table:
+SELECT * FROM 00__German_motorcycle_Grand_Prix;
+pos  no           rider manufacturer  laps time_retired  grid  points
+1   75   mattia pasini       aprilia  27.0   39:44.091   3.0    25.0
+2   19 álvaro bautista       aprilia  27.0       +0.01   2.0    20.0
+3   52     lukáš pešek         derbi  27.0      +0.111   1.0    16.0
+4   55   héctor faubel       aprilia  27.0      +9.298  10.0    13.0
+5   24    simone corsi        gilera  27.0      +9.372   9.0    11.0
+6    1     thomas lüthi         honda  27.0      +10.57  13.0    10.0
+7   18   nicolás terol         derbi  27.0     +11.835   5.0     9.0
+8   36     mika kallio           ktm  27.0     +11.905   4.0     8.0
+9    6      joan olivé       aprilia  27.0     +26.017  16.0     7.0
+10   33    sergio gadea       aprilia  27.0     +26.172  12.0     6.0
+... (33 rows omitted) ...
+*/
+columns: ['pos', 'no.', 'rider', 'manufacturer', 'laps', 'time/retired', 'grid', 'points']
+<output>
+["Base", "Select_Row"]
+
+<input>
+Q: how many cyclist are not listed with a country team?
+Table Content:
+CREATE TABLE _00___0_UCI_Track_Cycling_World_Cup_Classics___Round_____Women_s_scratch_race (
+rank int,
+cyclist text,
+team text,
+laps_ndown int,
+notes text
+)
+/*
+All rows of the table:
+SELECT * FROM _00___0_UCI_Track_Cycling_World_Cup_Classics___Round_____Women_s_scratch_race;
+rank                   cyclist                       team  laps_ndown notes
+1            iryna shpylova                    ukraine         NaN     q
+2              jessie daams                    belgium         NaN     q
+3                 eunmi park                south korea        -1.0     q
+4        evgeniya romanyuta                     russia        -1.0     q
+5              andrea wolfer                switzerland        -1.0     q
+6            giorgia bronzini                      italy        -1.0     q
+7 leire olaberria dorronsoro                      spain        -1.0     q
+8          joanne kiesanowski                new zealand        -1.0     q
+9                 dulce pliego                     mexico        -1.0     q
+10           jessie maclean verducci breakaway racing        -1.0     q
+... (8 rows omitted) ...
+*/
+columns: ['rank', 'cyclist', 'team', 'laps\ndown', 'notes']
+<output>
+["Execute_SQL", "Select_Row", "RAG"]
+
+<input>
+Q: how many cyclist do not have -1 laps down?
+Table Content:
+CREATE TABLE _00___0_UCI_Track_Cycling_World_Cup_Classics___Round_____Women_s_scratch_race (
+rank int,
+cyclist text,
+team text,
+laps_ndown int,
+notes text
+)
+/*
+All rows of the table:
+SELECT * FROM _00___0_UCI_Track_Cycling_World_Cup_Classics___Round_____Women_s_scratch_race;
+rank                   cyclist                       team  laps_ndown notes
+1            iryna shpylova                    ukraine         NaN     q
+2              jessie daams                    belgium         NaN     q
+3                 eunmi park                south korea        -1.0     q
+4        evgeniya romanyuta                     russia        -1.0     q
+5              andrea wolfer                switzerland        -1.0     q
+6            giorgia bronzini                      italy        -1.0     q
+7 leire olaberria dorronsoro                      spain        -1.0     q
+8          joanne kiesanowski                new zealand        -1.0     q
+9                 dulce pliego                     mexico        -1.0     q
+10           jessie maclean verducci breakaway racing        -1.0     q
+... (8 rows omitted) ...
+*/
+columns: ['rank', 'cyclist', 'team', 'laps\ndown', 'notes']
+<output>
+["Base", "Select_Row", "RAG"]
+
+<input>
+Q: what two cyclists come from teams with no laps down?
+Table Content:
+CREATE TABLE _00___0_UCI_Track_Cycling_World_Cup_Classics___Round_____Women_s_scratch_race (
+rank int,
+cyclist text,
+team text,
+laps_ndown int,
+notes text
+)
+/*
+All rows of the table:
+SELECT * FROM _00___0_UCI_Track_Cycling_World_Cup_Classics___Round_____Women_s_scratch_race;
+rank                   cyclist                       team  laps_ndown notes
+1            iryna shpylova                    ukraine         NaN     q
+2              jessie daams                    belgium         NaN     q
+3                 eunmi park                south korea        -1.0     q
+4        evgeniya romanyuta                     russia        -1.0     q
+5              andrea wolfer                switzerland        -1.0     q
+6            giorgia bronzini                      italy        -1.0     q
+7 leire olaberria dorronsoro                      spain        -1.0     q
+8          joanne kiesanowski                new zealand        -1.0     q
+9                 dulce pliego                     mexico        -1.0     q
+10           jessie maclean verducci breakaway racing        -1.0     q
+... (8 rows omitted) ...
+*/
+columns: ['rank', 'cyclist', 'team', 'laps\ndown', 'notes']
+<output>
+["Execute_SQL", "Select_Row", "RAG"]
+
+<input>
+Q: which country is represented by the most drivers?
+Table Content:
+CREATE TABLE _00__Gran_Premio_Telmex (
+pos int,
+no int,
+driver text,
+team text,
+laps int,
+time_retired text,
+grid int,
+points int
+)
+/*
+All rows of the table:
+SELECT * FROM _00__Gran_Premio_Telmex;
+pos no              driver                  team  laps time_retired  grid  points
+1  1 sébastien bourdais    newman/haas racing    66  1:51:31.146     2      34
+2  9     justin wilson               rusport    66     +pt3.528s     1      29
+3  5          will power        team australia    66    +pt46.536s     4      26
+4  2   bruno junqueira    newman/haas racing    66      +1:4.023     3      23
+5 15     alex tagliani        team australia    66     +1:18.033     8      22
+6  6       oriol servià            pkv racing    66     +1:28.745     7      19
+7  4   nelson philippe      cte racing - hvm    66     +1:29.997    10      17
+8 27   andrew ranger mi-jack conquest racing    65       + 1 lap    16      16
+9  3   david martínez       forsythe racing    65       + 1 lap     9      13
+10  7         buddy rice       forsythe racing    65       + 1 lap    14      11
+... (8 rows omitted) ...
+*/
+columns: ['pos', 'no', 'driver', 'team', 'laps', 'time/retired', 'grid', 'points']
+<output>
+["Select_Column", "Select_Row", "RAG"]

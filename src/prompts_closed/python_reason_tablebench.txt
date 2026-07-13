@@ -1,0 +1,56 @@
+You are a data analyst proficient in Python. Your task is to write executable Python code to analyze the table and then answer questions.
+
+[Guidelines]
+You should act following requirements below:
+1. based on the question, write out your analytical approach, and then write Python code according to this approach.
+2. The code needs to be concise and easy to understand, and if necessary, add comments for clarification.
+3. Code blocks need to strictly start with ```python and end with ```
+4. Your analysis must be based entirely on the above data. If the user's question is not related to data analysis, please politely refuse.
+5. You need to generate executable code. If there are results to be presented, please use the print function; if there are charts, please use the matplotlib library to draw them.
+6. Ensure to load the table with command ```df = pd.read_csv('table.csv')```
+
+The answer should follow the format below:
+[Answer Format]
+Final Answer: AnswerName1, AnswerName2...
+
+Ensure the final answer format is the last output line and can only be in the "Final Answer: AnswerName1, AnswerName2..." form, no other form. Ensure the "AnswerName" is a number or entity name, as short as possible, without any explanation.
+
+Let's think step by step and then generate python code to analyze table and present the final answer to the question.
+
+Read the table below in JSON format:
+[TABLE] 
+{'columns': ['season', 'tropical lows', 'tropical cyclones', 'severe tropical cyclones', 'strongest storm'], 'data': [['1990 - 91', 10, 10, 7, 'marian'], ['1991 - 92', 11, 10, 9, 'jane - irna'], ['1992 - 93', 6, 3, 1, 'oliver'], ['1993 - 94', 12, 11, 7, 'theodore'], ['1994 - 95', 19, 9, 6, 'chloe'], ['1995 - 96', 19, 14, 9, 'olivia'], ['1996 - 97', 15, 14, 3, 'pancho'], ['1997 - 98', 10, 9, 3, 'tiffany'], ['1998 - 99', 21, 14, 9, 'gwenda'], ['1999 - 00', 13, 12, 5, 'john / paul']]}
+
+Let's get start!
+Question: What is the average number of tropical cyclones per season?
+Step 1: The user wants to calculate the average number of tropical cyclones per season.
+Step 2: Load the dataframe.
+Step 3: Select the 'tropical cyclones' column.
+Step 4: Calculate the mean of this column and print it.
+```python
+import pandas as pd
+
+df = pd.read_csv('table.csv')
+# The column 'tropical cyclones' contains numerical values
+mean_cyclones = df['tropical cyclones'].mean()
+print(f"Final Answer: {mean_cyclones:.1f}")
+```
+
+Read the table below in JSON format:
+[TABLE] 
+{'columns': ['rank', 'route', 'avg daily flts', 'of airlines', 'distance (km)', 'market share leader'], 'data': [['1', 'seoul ( gmp ) - jeju ( cju )', 159, 7, 451, 'korean air'], ['2', 'rio de janeiro ( sdu ) - s\u00e3o paulo ( cgh )', 125, 4, 359, 'tam'], ['3', 'mumbai ( bom ) - new delhi ( del )', 123, 8, 1138, 'jet airways'], ['4', 'tokyo ( hnd ) - sapporo ( cts )', 119, 4, 822, 'all nippon airways'], ['5', 'monte carlo ( mcm ) - nice ( nce )', 117, 2, 18, 'heli air monaco'], ['6t', 'madrid ( mad ) - barcelona ( bcn )', 116, 4, 484, 'iberia'], ['6t', 'melbourne ( mel ) - sydney ( syd )', 116, 8, 705, 'qantas'], ['8', 'kahului ( ogg ) - honolulu ( hnl )', 98, 4, 163, 'hawaiian airlines'], ['9t', 'johannesburg ( jnb ) - cape town ( cpt )', 92, 6, 1270, 'south african airways'], ['9t', 'fukuoka ( fuk ) - tokyo ( hnd )', 92, 3, 881, 'japan airlines']]}
+
+Let's get start!
+Question: What is the total average daily flights of all routes combined?
+Step 1: The user wants the sum of average daily flights.
+Step 2: Load dataframe.
+Step 3: Select 'avg daily flts' column.
+Step 4: Sum the values and print.
+```python
+import pandas as pd
+
+df = pd.read_csv('table.csv')
+# Sum the 'avg daily flts' column
+total_flights = df['avg daily flts'].sum()
+print(f"Final Answer: {total_flights}")
+```

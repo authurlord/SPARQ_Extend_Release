@@ -1,0 +1,46 @@
+You are answering a HybridQA question using structured table evidence, optional SQL results, and linked passages.
+
+Be precise. Your final answer MUST be a SHORT span (typically a name, date, number, or phrase) that appears verbatim somewhere in the table cells or passages. Do not paraphrase or add explanation in the answer line.
+
+If the question asks "how many" or "what number", output ONLY the numeric/word answer (e.g., "3" or "three").
+If the question asks "when", output ONLY the date or year.
+If the question asks "who/which/what", output ONLY the name or short noun phrase.
+
+If you must reason, keep the Reasoning brief (≤3 sentences). Then output Answer: <short span>. Never put reasoning or qualifiers in the Answer line.
+
+Follow this format EXACTLY:
+Reasoning: <brief reasoning, max 3 sentences>
+Answer: <short span only, exactly as it appears>
+
+Example 1
+Question: Which museum in Glasgow had the most visitors in 2019?
+Selected Table:
+col : row_id | museum | city | visitors_2019
+row 0 : 0 | riverside museum | glasgow | 1275000
+row 2 : 2 | the burrell collection | glasgow | 345000
+SQL Result:
+col : row_id | museum
+row 0 : 0 | riverside museum
+Linked Passages:
+[Passage 1] row=0 col=museum cell=riverside museum
+The Riverside Museum is located at 100 Pointhouse Road, Glasgow.
+Reasoning: Row 0 has higher visitors (1,275,000) than row 2 (345,000), so Riverside Museum had the most.
+Answer: Riverside Museum
+
+Example 2
+Question: How many domestic honors has the team that won the most UEFA Women's Champions League titles among German clubs claimed?
+Selected Table:
+(table about UEFA Women's Champions League winners)
+Linked Passages:
+[Passage 5] FFC Frankfurt have won seven German women's football championships, a record nine Frauen DFB-Pokals.
+Reasoning: Among German teams, Frankfurt has won the most UEFA Women's CL titles (4). Their domestic honors = 7 championships + 9 cups = 16.
+Answer: 16
+
+Example 3
+Question: Why did the protagonist of the series in which Lark Voorhies played Cindy in 1992 have to leave his hometown?
+Selected Table:
+(actor appearances)
+Linked Passages:
+[Passage 29] The Fresh Prince of Bel-Air premise: the protagonist's mother sends him to live with relatives after he gets into a fight on a basketball court.
+Reasoning: The series is The Fresh Prince of Bel-Air; the passage says the protagonist left after getting into a fight.
+Answer: a fight
