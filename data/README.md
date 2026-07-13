@@ -40,23 +40,39 @@ bundle (Google Drive; a maintainer copy with weights also lives on the PI's
 Quark netdisk). Full details + exact code consumers in
 [`../docs/DATA_HANDOFF.md`](../docs/DATA_HANDOFF.md).
 
-| Blob | Size | What |
-|---|---:|---|
-| `data_misc.tar.gz` | 227 MB | HybridQA raw (`WikiTables-WithLinks*.zip` + train/dev/test) + IBM TableIR table pool (`corpus_structure.jsonl`, 8891 tables) + reranker training sets |
-| `ottqa_all_passages/all_passages.json` | 3.2 GB | OTT-QA official 5.96M Wikipedia passage pool (open-domain leg; streamed with `ijson`) |
+| Blob | Size | Belongs to | What |
+|---|---:|---|---|
+| `data_misc.tar.gz` | 227 MB | both | HybridQA raw (`WikiTables-WithLinks*.zip` + train/dev/test) + IBM TableIR table pool (`corpus_structure.jsonl`, 8891 tables) + reranker training sets. **Does NOT contain the passage pools below.** |
+| `open_pool/passages.jsonl` | 73 MB | **HybridQA** | HybridQA full-dev linked-passage pool — **75,642 passages** (3,053 dev tables). This is the *complete* HybridQA passage pool; there is no larger one. |
+| `open_pool_full/passages.jsonl` | 232 MB | **OTT-QA** | OTT-QA passage pool — **240,042 passages** (8,891 tables). Used by the strict-1690 E2E. |
+| `ottqa_all_passages/all_passages.json` | 3.2 GB | **OTT-QA only** | OTT-QA official **5.96M** Wikipedia passage corpus, streamed with `ijson`. **Only OTT-QA uses this**; needed for the OTT-QA full-dev-2214 EM 0.676 run. HybridQA never uses it. |
 
-Restore: `tar -xzf data_misc.tar.gz` at the repo root (paths are already
-`data/…`). The strict-1690 OTT-QA E2E smoke needs only `data_misc.tar.gz`
-(IBM TableIR tables + HybridQA passage pool); the 3.2 GB `all_passages.json`
-is only needed for the full-dev 2214 open-domain run.
+**Passage-pool matrix (which pool each dataset uses):**
+
+| Dataset | Complete open-domain pool | Result |
+|---|---|---|
+| HybridQA (n=3466) | `open_pool/passages.jsonl` — **75,642** | EM 0.508 / F1 0.549 |
+| OTT-QA strict-1690 | `open_pool_full/passages.jsonl` — **240,042** | EM 65.92 (reranker top-1) |
+| OTT-QA full-dev (n=2214) | `all_passages.json` — **5.96M** | EM 0.676 / F1 0.732 |
+
+Restore: `tar -xzf data_misc.tar.gz` at the repo root. **Note:** the passage
+pools are *not* inside `data_misc.tar.gz` — they are separate intermediate
+products (in the reviewer data bundle). You do **not** need any pool to
+reproduce the headline EM/F1: the frozen per-query reader inputs
+(`analysis/reader_prompts/sparqx_cot_{hybridqa,ottqa}.jsonl.gz`, see
+[`../docs/REPRODUCE.md`](../docs/REPRODUCE.md)) already bake in the correct
+passages. Pools are only needed to re-run retrieval from scratch.
 
 ## 4. Final layout the code expects
 
 ```
 SPARQ_Extend_Release/
-└── data/
-    ├── hybridqa_raw/            # train/dev/test.json + WikiTables-WithLinks*.zip  (from data_misc.tar.gz)
-    ├── ottqa_raw_full/          # IBM TableIR: corpus_structure.jsonl (8891 tables) + parquet/qrels
-    ├── ottqa_repo/data/traindev_tables.json   # OTT-QA tables (from the OTT-QA repo)
-    └── ottqa_all_passages/all_passages.json   # 3.2 GB, 5.96M passages (full-dev only)
+├── data/
+│   ├── hybridqa_raw/            # train/dev/test.json + WikiTables-WithLinks*.zip  (from data_misc.tar.gz)
+│   ├── ottqa_raw_full/          # IBM TableIR: corpus_structure.jsonl (8891 tables) + parquet/qrels
+│   ├── ottqa_repo/data/traindev_tables.json   # OTT-QA tables (from the OTT-QA repo)
+│   └── ottqa_all_passages/all_passages.json   # 3.2 GB, 5.96M passages — OTT-QA full-dev only
+└── analysis/
+    ├── open_pool/passages.jsonl       # 75,642 — HybridQA passage pool
+    └── open_pool_full/passages.jsonl  # 240,042 — OTT-QA strict-1690 passage pool
 ```
