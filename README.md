@@ -38,42 +38,13 @@ Models used are documented with HuggingFace links in
 products are documented in [`data/README.md`](./data/README.md) and
 [`docs/DATA_HANDOFF.md`](./docs/DATA_HANDOFF.md).
 
-## Headline results (this release)
+## Reproduction
 
-**Closed setting** — Qwen3.6-35B-A3B reader, unified offline pipeline
-(reproduced 2026-06/07; see `analysis/`):
-
-| Dataset | Metric | Qwen3.5-4B | **Qwen3.6-35B** |
-|---|---|---:|---:|
-| WikiTQ | EM | 76.34 | **84.55** |
-| TabFact | accuracy | 89.77 | **93.82** |
-| NIAT | EM | 66.58 | **77.86** |
-| TableBench | ROUGE-L | 0.3507 | **0.4671** |
-| FeTaQA | ROUGE-L | 0.4980 | **0.5036** |
-
-**Open setting (main results, paper Table VI)** — full dev, open-domain
-(both table and passages retrieved; gold cell→passage metadata removed),
-Qwen3.6-35B reader:
-
-| Benchmark | n | SPARQ+ EM | SPARQ+ F1 | best offline baseline (EM) |
-|---|---:|---:|---:|---|
-| **HybridQA** | 3,466 | **0.508** | **0.549** | HELIOS (−1.3 pp) |
-| **OTT-QA** | 2,214 | **0.676** | **0.732** | HELIOS (−8.7 pp), COS (−17.2 pp) |
-
-SPARQ+ stays **< 1 s/query** (0.776 s HybridQA, 0.973 s OTT-QA) vs iterative
-pipelines (HELIOS 23.7 s / 28.9 s).
-
-**OTT-QA strict-1690 subset** (Stage-1 ablation reference, Qwen3.6-35B):
-
-| Config | EM | F1 |
-|---|---:|---:|
-| E2E, 3-leg RRF top-1 (no reranker) | 59.94 | 65.07 |
-| **E2E, + table reranker top-1** | **65.92** | **71.60** |
-| Oracle ceiling (gold table + BM25 top-30) | 74.44 | 79.68 |
-
-(A separate *closed*/anchored-table HybridQA study — gold table given — reached
-EM 73.92 with a passage reranker; that is a different, easier setting and is
-**not** the open-domain main result above.)
+All numbers are in the paper (`SPARQ+_full_version.pdf`). This repository
+provides the code, intermediate products, and step-by-step commands to
+reproduce them — see **[`docs/REPRODUCE.md`](./docs/REPRODUCE.md)** for the
+exact per-benchmark commands (closed + open) and the weight-free / retrieval-free
+paths. Start with the smoke tests under [`examples/`](./examples) (below).
 
 ## Repository layout
 
@@ -129,8 +100,9 @@ See [`examples/`](./examples) for the smoke scripts and
 | Retrieval (Qwen3-Embedding-0.6B / BGE) | 1 GPU ≥ 12 GB, or CPU for small runs |
 | Pipeline driver | CPU + ~10 GB RAM |
 
-The included `scripts/closed/start_vllm_35b.sh` uses `--enforce-eager` for a
-low-memory, fast-loading smoke configuration; drop it for throughput runs.
+The reader launcher `scripts/closed/start_vllm_35b.sh` serves
+`--default-chat-template-kwargs '{"enable_thinking": false}'` (required — the
+operator/SQL path reads `message.content` directly).
 
 ## License
 
