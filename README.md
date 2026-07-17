@@ -108,15 +108,3 @@ operator/SQL path reads `message.content` directly).
 
 MIT — see [`LICENSE`](./LICENSE). Please cite the upstream benchmarks and
 Qwen3 models as appropriate (links above and in `docs/MODEL_CARDS.md`).
-
-## Citation
-
-```bibtex
-@article{sparqplus,
-  title   = {SPARQ+: Structure-Conditioned Evidence Retrieval and Adaptive
-             Reasoning for Offline Open-Domain Table-Text Question Answering},
-  author  = {Anonymous},
-  journal = {Under review},
-  year    = {2026}
-}
-```
